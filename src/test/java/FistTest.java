@@ -107,6 +107,26 @@ public class FistTest {
 
     }
 
+    @Test
+    public void searchForTheWord(){
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find Search input", 5);
+
+        waitForElementAndSendkeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                "Cannot find search input", "Java", 5);
+
+        waitForElementPrsenetBy(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find SearchInput",
+                15);
+
+        List<WebElement> elements = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        System.out.println(elements.size());
+
+        elements.stream().allMatch(t->t.getAttribute("text").contains("Java"));
+
+    }
+
 
 
    /* @Test
