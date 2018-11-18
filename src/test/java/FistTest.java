@@ -11,9 +11,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FistTest {
     private AppiumDriver driver;
+
 
     //лучше не менять, стандартное название метода аппиума. именно так он понимает откуда брать параметры
     @Before
@@ -37,15 +40,75 @@ public class FistTest {
     public void tearDown() {
         driver.quit();
     }
+
     @Test
-    public void textBeforeSearch(){
-       String searchResult = waitForElementPrsenetBy(
+    public void textBeforeSearch() {
+        String searchResult = waitForElementPrsenetBy(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-               "Search field was not foud")
+                "Search field was not foud")
                 .getAttribute("text");
         System.out.println(searchResult);
         Assert.assertTrue(searchResult.contains("Search"));
     }
+
+    @Test
+    public void searchWodaAndAfterCheckInvisibilitiOf3Elements() {
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find Search input", 5);
+
+        waitForElementAndSendkeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                "Cannot find search input", "Java", 5);
+
+        ArrayList<WebElement> list = new ArrayList<>();
+
+       WebElement firstArticle = waitForElementPrsenetBy(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                        "//*[@text='Object-oriented programming language']"),
+                "Java element was not found", 15);
+       list.add(firstArticle);
+
+        WebElement secondArticle = waitForElementPrsenetBy(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                        "//*[@text='Island of Indonesia']"),
+                "Java element was not found", 15);
+        list.add(secondArticle);
+
+        WebElement thirdArticle = waitForElementPrsenetBy(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                        "//*[@text='Programming language']"),
+                "Java element was not found", 15);
+        list.add(thirdArticle);
+        list.stream().forEach(i-> System.out.println(i.getAttribute("text")));
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']" +
+                        "//*[@class='android.widget.ImageButton']"),
+                "Java element was not found", 15);
+
+        waitForElementPrsenetBy(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search field was not foud")
+                .getAttribute("text");
+
+       //Assert.assertTrue(waitForListOfWebElementsNotPresented(list));
+        Assert.assertTrue(waitForElementNotPresented( By.xpath
+                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                        "//*[@text='Object-oriented programming language']"),
+                "Java element was not found", 15));
+        Assert.assertTrue(waitForElementNotPresented( By.xpath
+                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                        "//*[@text='Island of Indonesia']"),
+                "Java element was not found", 15));
+        Assert.assertTrue(waitForElementNotPresented( By.xpath
+                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+                                "//*[@text='Programming language']"),
+                "Java element was not found", 15));
+
+
+    }
+
+
+
    /* @Test
     public void testCancelSearch() {
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
@@ -82,6 +145,7 @@ public class FistTest {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(erroeMessage + "\n");
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+
     }
 
 
@@ -108,6 +172,10 @@ public class FistTest {
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
+    private boolean waitForListOfWebElementsNotPresented(List<WebElement> elements) {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        return wait.until(ExpectedConditions.invisibilityOfAllElements(elements));
+}
 
 
 }
