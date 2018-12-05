@@ -1,27 +1,27 @@
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import ui.ArticlePageObject;
+import ui.MainPageObject;
+import ui.SearchPageObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FistTest extends BaseTest{
+public class FistTest extends BaseTest {
 
-    BaseTest test = new BaseTest();
-   AppiumDriver driver = test.getDriver();
+    private MainPageObject mainPageObject;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        mainPageObject = new MainPageObject(driver);
+    }
 
     @Test
     public void textBeforeSearch() {
-        String searchResult = waitForElementPrsenetBy(
+        String searchResult = mainPageObject.waitForElementPrsenetBy(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Search field was not foud")
                 .getAttribute("text");
@@ -30,54 +30,67 @@ public class FistTest extends BaseTest{
     }
 
     @Test
-    public void searchWodaAndAfterCheckInvisibilitiOf3Elements() {
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find Search input", 5);
+    public void testCanselSearch() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.waitForCancelButtonToAppear();
+        searchPageObject.clickCancelSearch();
+        searchPageObject.waitForCancelButtonToDisppear();
+    }
 
-        waitForElementAndSendkeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                "Cannot find search input", "Java", 5);
+    @Test
+    public void testCompareArticle(){
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+       String article_title = articlePageObject.getArticleTitle();
+       Assert.assertEquals("We see unexpected title",
+               "Java (programming language)", article_title);
+    }
+
+
+    @Test
+    public void testSearchWodaAndAfterCheckInvisibilitiOf3Elements() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
 
         ArrayList<WebElement> list = new ArrayList<>();
 
-       WebElement firstArticle = waitForElementPrsenetBy(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Object-oriented programming language']"),
-                "Java element was not found", 15);
-       list.add(firstArticle);
+        WebElement firstArticle = searchPageObject.waitForSearchResult("Object-oriented programming language");
+        list.add(firstArticle);
 
-        WebElement secondArticle = waitForElementPrsenetBy(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Island of Indonesia']"),
-                "Java element was not found", 15);
+        WebElement secondArticle = searchPageObject.waitForSearchResult("Island of Indonesia");
         list.add(secondArticle);
 
-        WebElement thirdArticle = waitForElementPrsenetBy(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Programming language']"),
-                "Java element was not found", 15);
+        WebElement thirdArticle =searchPageObject.waitForSearchResult("Programming language");
         list.add(thirdArticle);
-        list.stream().forEach(i-> System.out.println(i.getAttribute("text")));
+        list.stream().forEach(i -> System.out.println(i.getAttribute("text")));
 
-        waitForElementAndClick(
+        mainPageObject.waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']" +
                         "//*[@class='android.widget.ImageButton']"),
                 "Java element was not found", 15);
 
-        waitForElementPrsenetBy(
+        mainPageObject.waitForElementPrsenetBy(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Search field was not foud")
                 .getAttribute("text");
 
-       //Assert.assertTrue(waitForListOfWebElementsNotPresented(list));
-        Assert.assertTrue(waitForElementNotPresented( By.xpath
+        //Assert.assertTrue(waitForListOfWebElementsNotPresented(list));
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
                         ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Object-oriented programming language']"),
+                                "//*[@text='Object-oriented programming language']"),
                 "Java element was not found", 15));
-        Assert.assertTrue(waitForElementNotPresented( By.xpath
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
                         ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Island of Indonesia']"),
+                                "//*[@text='Island of Indonesia']"),
                 "Java element was not found", 15));
-        Assert.assertTrue(waitForElementNotPresented( By.xpath
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
                         ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                                 "//*[@text='Programming language']"),
                 "Java element was not found", 15));
@@ -86,59 +99,16 @@ public class FistTest extends BaseTest{
     }
 
     @Test
-    public void searchForTheWord(){
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find Search input", 5);
+    public void testSearchForTheWord() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
 
-        waitForElementAndSendkeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                "Cannot find search input", "Java", 5);
-
-        waitForElementPrsenetBy(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find SearchInput",
-                15);
-
-        List<WebElement> elements = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        List<WebElement> elements = searchPageObject.getListofArticles();
         System.out.println(elements.size());
 
-        elements.stream().allMatch(t->t.getAttribute("text").contains("Java"));
+        elements.stream().allMatch(t -> t.getAttribute("text").contains("Java"));
 
     }
-
-
-
-   /* @Test
-    public void testCancelSearch() {
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find SearchInput",
-                15);
-
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find SearchInput",
-                15);
-
-        waitForElementNotPresented(By.id("org.wikipedia:id/search_close_btn"),
-                "Element is still presented on the page",
-                15);
-    }*/
-   /* @Test
-    public void firstTest() {
-
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find SearchInput", 5);
-
-        waitForElementAndSendkeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                "Cannot find search input", "Java", 5);
-
-
-        waitForElementPrsenetBy(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                        "//*[@text='Object-oriented programming language']"),
-                "Java element was not found", 15);
-        //System.out.println("First test run");
-    }*/
-
-
 
 }
