@@ -24,7 +24,7 @@ public class SwipeTest extends BaseTest {
         ArticlePageObject articlePageObject = new ArticlePageObject(driver);
         articlePageObject.waitForTitleElement();
 
-        mainPageObject.swipeUp(2000);
+        mainPageObject.swipeUp(1000);
 
     }
 

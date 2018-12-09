@@ -8,7 +8,6 @@ public class MyListsPAgeObject extends MainPageObject{
             ARTICLE_BY_TITLE_TPL ="//*[@text='{TITLE}']",
             FOLDER_NAME_BY_SUBSTRING_TPL = "//*[@text='{SUBSTRING}']";
 
-
     public MyListsPAgeObject(AppiumDriver driver) {
         super(driver);
     }

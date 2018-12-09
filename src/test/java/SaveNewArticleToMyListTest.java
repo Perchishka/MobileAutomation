@@ -19,7 +19,7 @@ public class SaveNewArticleToMyListTest extends BaseTest {
 
 
         String folderName = "Learning programming";
-        String firstArticle = "Object-oriented programming language";
+        String firstArticle = "Java (programming language)";
         String secondrticle = "Java";
         int j = 0;
         NavigationUi navigationUi = new NavigationUi(driver);
@@ -44,10 +44,10 @@ public class SaveNewArticleToMyListTest extends BaseTest {
                 articlePageObject.closeArticle();
                 j++;
             } else {
-
+                myListsPAgeObject.clickOnExistingFolder(folderName);
+                articlePageObject.closeArticle();
             }
-            myListsPAgeObject.clickOnExistingFolder(folderName);
-            articlePageObject.closeArticle();
+
         }
 
 

@@ -22,5 +22,6 @@ public class NavigationUi extends MainPageObject {
     /*TEMPLATES METHODS*/
 
 
+
     /*TEMPLATES METHODS*/
 }

@@ -25,8 +25,7 @@ public class MainPageObject {
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
 
     }
-
-
+    
 
     public WebElement waitForElementPrsenetBy(By by, String errorMessage) {
 
@@ -58,7 +57,6 @@ public class MainPageObject {
         wait.withMessage(errorMessage + "\n");
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
-
 
     public void swipeUp(int timeOfSwipe) {
         TouchAction action = new TouchAction(driver);

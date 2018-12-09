@@ -1,10 +1,12 @@
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import ui.ArticlePageObject;
 import ui.MainPageObject;
 import ui.SearchPageObject;
+import ui.WikipediaMainPageObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +73,14 @@ public class FistTest extends BaseTest {
         list.add(thirdArticle);
         list.stream().forEach(i -> System.out.println(i.getAttribute("text")));
 
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']" +
-                        "//*[@class='android.widget.ImageButton']"),
-                "Java element was not found", 15);
+        SearchPageObject searchPageObject1 = new SearchPageObject(driver);
+        searchPageObject.clickBackButton();
 
-        mainPageObject.waitForElementPrsenetBy(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Search field was not foud")
-                .getAttribute("text");
+        WikipediaMainPageObject wikipediaMainPageObject = new WikipediaMainPageObject(driver);
+        wikipediaMainPageObject.waitForHeader();
 
         //Assert.assertTrue(waitForListOfWebElementsNotPresented(list));
+
         Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
                         ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                                 "//*[@text='Object-oriented programming language']"),

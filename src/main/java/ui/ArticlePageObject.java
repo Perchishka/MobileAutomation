@@ -63,7 +63,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public void closeArticle() {
         this.waitForElementAndClick(By.xpath(CLOSE_ARTICLE_BUTTON),
-                "Cannot find first button to close article", 15);
+                "Cannot find first button to close article", 20);
     }
 
 
