@@ -25,7 +25,7 @@ public class MainPageObject {
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
 
     }
-    
+
 
     public WebElement waitForElementPrsenetBy(By by, String errorMessage) {
 

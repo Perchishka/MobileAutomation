@@ -1,7 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import ui.ArticlePageObject;
 import ui.MainPageObject;
@@ -103,7 +102,7 @@ public class FistTest extends BaseTest {
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 
-        List<WebElement> elements = searchPageObject.getListofArticles();
+        List<WebElement> elements = searchPageObject.getListofArticlesByTitle();
         System.out.println(elements.size());
 
         elements.stream().allMatch(t -> t.getAttribute("text").contains("Java"));
