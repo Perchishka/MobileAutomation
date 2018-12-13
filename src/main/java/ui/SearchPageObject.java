@@ -21,7 +21,7 @@ public class SearchPageObject extends MainPageObject {
            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION =
                    "//*[@resource-id='org.wikipedia:id/page_list_item_container' and android.widget.LinearLayout[android.widget.TextView[contains(@text,'{TITLE}')] " +
                            "and android.widget.TextView[contains(@text,'{DESCRIPTION}')] ]]",
-
+EMPTY_SEARCH="//*[@text='No results found']",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn";
 
     public SearchPageObject(AppiumDriver driver) {
@@ -44,6 +44,11 @@ public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElement(substring);
         return this.waitForElementPrsenetBy(By.xpath(search_result_xpath),
                 "Cannot find search result with substring " + substring);
+    }
+
+    public WebElement waitForEmptyResultLable() {
+        return this.waitForElementPrsenetBy(By.xpath(EMPTY_SEARCH),
+                "Cannot find empty search result lable");
     }
 
     public void waitForCancelButtonToAppear() {
@@ -77,6 +82,10 @@ public class SearchPageObject extends MainPageObject {
                 "Canot find list of webelements", 15);
     }
 
+    public int getAmountOfElements(){
+        return getListofArticlesByTitle().size();
+    }
+
     public List<WebElement> getListofArticles() {
         waitForCancelButtonToAppear();
         return this.getListofWebElement(By.xpath(SEARCH_RESULTS_LIST_ELEMENTS),
@@ -89,6 +98,17 @@ public class SearchPageObject extends MainPageObject {
        return this.waitForElementPrsenetBy(By.xpath(search_result_xpath),
                "Cannot find element with tittle: "+title +" and description: "+description);
     }
+
+    public void assertElementNotPresent(String error_message) {
+        int amount_of_elements = getAmountOfElements();
+        if (amount_of_elements > 0) {
+            String default_message = "An elements supposed to be not present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
+    }
+
+
+
 
     /*TEMPLATES METHODS*/
     private static String getResultSearchElement(String substring) {

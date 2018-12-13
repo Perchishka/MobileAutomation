@@ -109,8 +109,8 @@ public class MainPageObject {
                 .perform();
     }
     public List<WebElement> getListofWebElement(By by, String errorMessage, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+
+        return driver.findElements(by);
     }
 
     public void switchToframe(int framenumber) {

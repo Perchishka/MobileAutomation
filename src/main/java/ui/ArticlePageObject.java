@@ -31,6 +31,13 @@ public class ArticlePageObject extends MainPageObject {
         WebElement title_element = waitForTitleElement();
         return title_element.getAttribute("text");
     }
+    public void assertElementPresent(String error_message) {
+        String article_title = getArticleTitle();
+        if (article_title == null) {
+            String default_message = "An elements supposed to be not present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
+    }
 
     public void swipeToFooter() {
         this.swipeUpToFindElement(
