@@ -1,6 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import junit.framework.*;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 
@@ -33,6 +34,7 @@ public class BaseTest extends TestCase {
 
     @Override
     protected void tearDown() throws Exception {
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
         super.tearDown();
     }

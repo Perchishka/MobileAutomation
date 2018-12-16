@@ -26,6 +26,11 @@ public class MainPageObject {
 
     }
 
+    public String waitForElementAndgetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPrsenetBy(by, error_message, timeoutInSeconds);
+        return element.getAttribute(attribute);
+    }
+
 
     public WebElement waitForElementPrsenetBy(By by, String errorMessage) {
 
