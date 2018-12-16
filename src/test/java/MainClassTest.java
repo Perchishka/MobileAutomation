@@ -17,4 +17,10 @@ public class MainClassTest extends BaseTest {
         Assert.assertTrue("The number "+mainClass.getClassNumber()+" is not > 45",
                 mainClass.getClassNumber()>45);
     }
+
+    @Test
+    public void testGetClassString(){
+        Assert.assertTrue("The string is not correct", mainClass.getClass_string().contains("hello")
+                | mainClass.getClass_string().contains("Hello"));
+}
 }
