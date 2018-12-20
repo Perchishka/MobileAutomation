@@ -1,11 +1,14 @@
+package iOS;
+
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import junit.framework.*;
+import io.appium.java_client.ios.IOSDriver;
+import junit.framework.TestCase;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
 import java.net.URL;
 
-public class BaseTest extends TestCase {
+public class IOSTestCase extends TestCase {
     AppiumDriver driver;
 
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
@@ -18,19 +21,18 @@ public class BaseTest extends TestCase {
         super.setUp();
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("platformName", "iOS");
         // для андройда валью может быть любым а для айоса должно четко соответствовать названию девайса
-        capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "8.0");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "C:\\JAVA\\WORK\\mobileAutomation\\libs\\org.wikipedia.apk");
+        capabilities.setCapability("deviceName", "iPhone 8");
+        capabilities.setCapability("platformVersion", "11.1");
 
-        driver = new AndroidDriver(new URL(APPIUM_URL), capabilities);
+        capabilities.setCapability("app", "C:\\JAVA\\WORK\\mobileAutomation\\libs\\org.wikipedia.apk"); //ljdbnm genm r dbrbgtlbf fgg
+
+        driver = new IOSDriver(new URL(APPIUM_URL), capabilities);
         this.rotateScreenPortrait();
 
     }
+
     protected void rotateScreenPortrait(){driver.rotate(ScreenOrientation.PORTRAIT);}
     protected void rotateScreenLandscape(){driver.rotate(ScreenOrientation.LANDSCAPE);}
 

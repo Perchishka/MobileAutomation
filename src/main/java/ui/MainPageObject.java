@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
 import static io.appium.java_client.touch.offset.PointOption.point;
 import static java.time.Duration.ofMillis;
@@ -19,45 +21,47 @@ public class MainPageObject {
         this.driver = driver;
     }
 
-    public WebElement waitForElementPrsenetBy(By by, String erroeMessage, long timeoutInSeconds) {
+    public WebElement waitForElementPrsenetBy(String locator, String erroeMessage, long timeoutInSeconds) {
+        By by = this.getLocatorString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(erroeMessage + "\n");
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
 
     }
 
-    public String waitForElementAndgetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
-        WebElement element = waitForElementPrsenetBy(by, error_message, timeoutInSeconds);
+    public String waitForElementAndgetAttribute(String locator, String attribute, String error_message, long timeoutInSeconds) {
+        WebElement element = waitForElementPrsenetBy(locator, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
 
 
-    public WebElement waitForElementPrsenetBy(By by, String errorMessage) {
+    public WebElement waitForElementPrsenetBy(String locator, String errorMessage) {
 
-        return waitForElementPrsenetBy(by, errorMessage, 10);
+        return waitForElementPrsenetBy(locator, errorMessage, 10);
     }
 
 
-    public WebElement waitForElementAndClick(By by, String errorMessage, long timeoutInSeconds) {
-        WebElement element = waitForElementPrsenetBy(by, errorMessage, timeoutInSeconds);
+    public WebElement waitForElementAndClick(String locator, String errorMessage, long timeoutInSeconds) {
+        WebElement element = waitForElementPrsenetBy(locator, errorMessage, timeoutInSeconds);
         element.click();
         return element;
     }
 
-    public WebElement waitForElementAndSendkeys(By by, String errorMessage, String value, long timeoutInSeconds) {
-        WebElement element = waitForElementPrsenetBy(by, errorMessage, timeoutInSeconds);
+    public WebElement waitForElementAndSendkeys(String locator, String errorMessage, String value, long timeoutInSeconds) {
+        WebElement element = waitForElementPrsenetBy(locator, errorMessage, timeoutInSeconds);
         element.sendKeys(value);
         return element;
     }
 
-    public WebElement waitForElementClearAndSendkeys(By by, String errorMessage, String value, long timeoutInSeconds) {
-        WebElement element = waitForElementPrsenetBy(by, errorMessage, timeoutInSeconds);
+    public WebElement waitForElementClearAndSendkeys(String locator, String errorMessage, String value, long timeoutInSeconds) {
+        WebElement element = waitForElementPrsenetBy(locator, errorMessage, timeoutInSeconds);
         element.clear();
         element.sendKeys(value);
         return element;
     }
 
-    public boolean waitForElementNotPresented(By by, String errorMessage, long timeoutInSeconds) {
+    public boolean waitForElementNotPresented(String locator, String errorMessage, long timeoutInSeconds) {
+        By by = this.getLocatorString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
@@ -84,11 +88,12 @@ public class MainPageObject {
         swipeUp(1);
     }
 
-    public void swipeUpToFindElement(By by, String error_message, int max_swipes) {
+    public void swipeUpToFindElement(String locator, String error_message, int max_swipes) {
+        By by = this.getLocatorString(locator);
         int already_swiped = 0;
         while (driver.findElements(by).size() == 0) {
             if (already_swiped > max_swipes) {
-                waitForElementPrsenetBy(by, "Cannot find element by swiping up. \n" + error_message,
+                waitForElementPrsenetBy(locator, "Cannot find element by swiping up. \n" + error_message,
                         0);
                 return;
             }
@@ -97,8 +102,8 @@ public class MainPageObject {
         }
     }
 
-    public void swipeElementToLeft(By by, String error_message) {
-        WebElement element = waitForElementPrsenetBy(by, error_message, 10);
+    public void swipeElementToLeft(String locator, String error_message) {
+        WebElement element = waitForElementPrsenetBy(locator, error_message, 10);
         int left_x = element.getLocation().getX();
         int right_x = left_x + element.getSize().getWidth();
         int upper_y = element.getLocation().getY();
@@ -113,8 +118,9 @@ public class MainPageObject {
                 .release()
                 .perform();
     }
-    public List<WebElement> getListofWebElement(By by, String errorMessage, long timeoutInSeconds) {
 
+    public List<WebElement> getListofWebElement(String locator, String errorMessage, long timeoutInSeconds) {
+        By by = this.getLocatorString(locator);
         return driver.findElements(by);
     }
 
@@ -122,4 +128,18 @@ public class MainPageObject {
         driver.switchTo().frame(framenumber);
     }
 
+    private By getLocatorString(String locator_with_type) {
+        String[] exploded_locator = locator_with_type.split(Pattern.quote(":"), 2);
+        String by_type = exploded_locator[0];
+        String locator = exploded_locator[1];
+
+        if (by_type.equals("xpath")) {
+            return By.xpath(locator);
+        } else if(by_type.equals("id")) {
+            return By.id(locator);
+        }else {
+            throw new IllegalArgumentException("Cannot get type of locator. Locator: "+ locator_with_type);
+        }
+
+    }
 }
