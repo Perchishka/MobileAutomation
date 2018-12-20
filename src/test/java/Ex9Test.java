@@ -1,10 +1,6 @@
+import lib.BaseTest;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 import ui.SearchPageObject;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Ex9Test extends BaseTest {
 

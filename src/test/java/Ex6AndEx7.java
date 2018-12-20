@@ -1,44 +1,43 @@
+import lib.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 import ui.ArticlePageObject;
 import ui.SearchPageObject;
+import ui.factories.SearchPageObjectFactory;
 
 public class Ex6AndEx7 extends BaseTest {
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
     @Test
     public void testAssertionFirst() {
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 
         int amount_ofSearch_Result = searchPageObject.getAmountOfElements();
-        Assert.assertTrue("We found too few results", amount_ofSearch_Result>0);
+        Assert.assertTrue("We found too few results", amount_ofSearch_Result > 0);
     }
 
     @Test
     public void testAssertionAmountOfEmptySeaarch() {
-        String searchLine ="java";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        String searchLine = "java";
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchLine);
         searchPageObject.waitForEmptyResultLable();
 
-        searchPageObject.assertElementNotPresent("We've found some results by request "+searchLine);
+        searchPageObject.assertElementNotPresent("We've found some results by request " + searchLine);
 
     }
 
     @Test
     public void testEx6() {
-        String searchLine ="Java";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        String searchLine = "Java";
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchLine);
         searchPageObject.clickByArticleWithSubstring("Java");
 
         ArticlePageObject articlePageObject = new ArticlePageObject(driver);
 
-        articlePageObject.assertElementPresent("We've not found article title "+searchLine);
+        articlePageObject.assertElementPresent("We've not found article title " + searchLine);
 
 
     }

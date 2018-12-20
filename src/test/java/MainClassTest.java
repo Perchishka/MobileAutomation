@@ -1,4 +1,5 @@
 import Test1.MainClass;
+import lib.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 

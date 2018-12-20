@@ -5,24 +5,18 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[contains(@text, 'Search Wikipedia')]",
-            SEARCH_INPUT = "xpath://*[contains(@text, 'Search…')]",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                    "//*[@text='{SUBSTRING}']",
-            SEARCH_RESULTS_LIST_ELEMENTS = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_RESULTS_LIST_TITLE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
-                    "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
-            SEARCH_BACK_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/search_toolbar']" +
-                    "//*[@class='android.widget.ImageButton']",
-           SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION =
-                   "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container' " +
-                           "and android.widget.LinearLayout[android.widget.TextView[contains(@text,'{TITLE}')] " +
-                           "and android.widget.TextView[contains(@text,'{DESCRIPTION}')] ]]",
-EMPTY_SEARCH="xpath://*[@text='No results found']",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn";
+     protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULTS_LIST_ELEMENTS,
+            SEARCH_RESULTS_LIST_TITLE,
+            SEARCH_BACK_BUTTON,
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION,
+            EMPTY_SEARCH,
+            SEARCH_CANCEL_BUTTON;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -82,7 +76,7 @@ EMPTY_SEARCH="xpath://*[@text='No results found']",
                 "Canot find list of webelements", 15);
     }
 
-    public int getAmountOfElements(){
+    public int getAmountOfElements() {
         return getListofArticlesByTitle().size();
     }
 
@@ -94,9 +88,9 @@ EMPTY_SEARCH="xpath://*[@text='No results found']",
 
     public WebElement waitForElementByTitleAndDescription(String title, String description) {
         String search_result_xpath = getResultByTitleAndDEscription(title, description);
-        System.out.println("element with tittle: "+title +" and description: "+description+" was found");
-       return this.waitForElementPrsenetBy(search_result_xpath,
-               "Cannot find element with tittle: "+title +" and description: "+description);
+        System.out.println("element with tittle: " + title + " and description: " + description + " was found");
+        return this.waitForElementPrsenetBy(search_result_xpath,
+                "Cannot find element with tittle: " + title + " and description: " + description);
     }
 
     public void assertElementNotPresent(String error_message) {
@@ -106,8 +100,6 @@ EMPTY_SEARCH="xpath://*[@text='No results found']",
             throw new AssertionError(default_message + " " + error_message);
         }
     }
-
-
 
 
     /*TEMPLATES METHODS*/

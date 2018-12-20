@@ -1,6 +1,5 @@
-import io.appium.java_client.AppiumDriver;
+import lib.BaseTest;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import ui.ArticlePageObject;
 import ui.MainPageObject;
 import ui.SearchPageObject;
