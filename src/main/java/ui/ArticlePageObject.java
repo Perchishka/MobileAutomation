@@ -15,6 +15,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             MY_LIST_NAME_INPUT,
             MY_LIST_OK_BUTTON,
             CLOSE_ARTICLE_BUTTON,
+            PLACES_WITH_AUTOCLOSE,
             OPTIONS_ADD_TO_MY_LIST_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
@@ -35,6 +36,8 @@ abstract public class ArticlePageObject extends MainPageObject {
             return title_element.getAttribute("name");
         }
     }
+
+
 
     public void assertElementPresent(String error_message) {
         String article_title = getArticleTitle();
@@ -80,8 +83,14 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void addArticleToMySavedIos(){
+
         this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 " Cannot add article to My saved", 15);
+
+    }
+
+    public  void closeAuthWindow(){
+        this.waitForElementAndClick(PLACES_WITH_AUTOCLOSE, "Cannot click on autoclose button", 15);
     }
 
 

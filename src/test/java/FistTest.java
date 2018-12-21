@@ -18,12 +18,12 @@ public class FistTest extends BaseTest {
     private MainPageObject mainPageObject;
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         mainPageObject = new MainPageObject(driver);
     }
 
-    @Test
+    /*@Test
     public void textBeforeSearch() {
         String searchResult = mainPageObject.waitForElementPrsenetBy(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -31,7 +31,7 @@ public class FistTest extends BaseTest {
                 .getAttribute("text");
         System.out.println(searchResult);
         Assert.assertTrue(searchResult.contains("Search"));
-    }
+    }*/
 
     @Test
     public void testCanselSearch() {
@@ -50,7 +50,7 @@ public class FistTest extends BaseTest {
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = ArcticlePageObjectFactory.get(driver)
+        ArticlePageObject articlePageObject = ArcticlePageObjectFactory.get(driver);
        String article_title = articlePageObject.getArticleTitle();
        Assert.assertEquals("We see unexpected title",
                "Java (programming language)", article_title);

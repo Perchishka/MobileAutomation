@@ -150,6 +150,25 @@ public class MainPageObject {
                 .perform();
     }
 
+    public void clickOnElementByCoordinates(String locator, String error_message){
+        WebElement element = waitForElementPrsenetBy(locator, error_message, 10);
+        int  right_x = element.getLocation().getX();
+        int upper_y= element.getLocation().getY();
+        int lower_y = upper_y+element.getSize().getHeight();
+        int middle_y =(upper_y+lower_y)/2;
+        int width = element.getSize().getWidth();
+
+        int point_to_click_x=(right_x+width)-3;
+        int point_to_click_y=middle_y;
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(point(point_to_click_x, point_to_click_y))
+                .release()
+                .perform();
+
+    }
+
     public List<WebElement> getListofWebElement(String locator, String errorMessage, long timeoutInSeconds) {
         By by = this.getLocatorString(locator);
         return driver.findElements(by);

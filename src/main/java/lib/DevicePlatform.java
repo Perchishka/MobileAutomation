@@ -62,10 +62,10 @@ public class DevicePlatform {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "iOS");
         // для андройда валью может быть любым а для айоса должно четко соответствовать названию девайса
-        capabilities.setCapability("deviceName", "iPhone 8");
-        capabilities.setCapability("platformVersion", "11.1");
+        capabilities.setCapability("deviceName", "iPhone SE");
+        capabilities.setCapability("platformVersion", "11.3");
 
-        capabilities.setCapability("app", "C:\\JAVA\\WORK\\mobileAutomation\\libs\\org.wikipedia.apk"); //исправить линк
+        capabilities.setCapability("app", "/Users/ekaterinaperceva/Desktop/gradle/Wikipedia.app"); //исправить линк
         return capabilities;
     }
 

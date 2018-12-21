@@ -9,6 +9,7 @@ public class IOSArticlePageObject extends ArticlePageObject {
             FOOTER_ELEMENT = "id:View page in browser";
             CLOSE_ARTICLE_BUTTON = "id:Back";
             OPTIONS_ADD_TO_MY_LIST_BUTTON = "id:Save for later";
+            PLACES_WITH_AUTOCLOSE="id:places auth close";
         }
 
     public IOSArticlePageObject(AppiumDriver driver) {

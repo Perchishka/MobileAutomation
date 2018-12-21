@@ -30,8 +30,12 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void typeSearchLine(String searchLine) {
-        this.waitForElementAndSendkeys(SEARCH_INPUT,
+        this.waitForElementClearAndSendkeys(SEARCH_INPUT,
                 "Cannot find and type into search input", searchLine, 15);
+    }
+    public void clickSearchLine() {
+        this.waitForElementAndClick(SEARCH_INIT_ELEMENT,
+                "Cannot find and type into search input",  15);
     }
 
     public WebElement waitForSearchResult(String substring) {

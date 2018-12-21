@@ -33,10 +33,11 @@ public class SaveNewArticleToMyListTest extends BaseTest {
             add(firstArticle);
             add(secondrticle);
         }};
-        for (String i : arcticlesNames) {
+
             SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
             searchPageObject.initSearchInput();
             searchPageObject.typeSearchLine("Java");
+        for (String i : arcticlesNames) {
             searchPageObject.clickByArticleWithSubstring(i);
             ArticlePageObject articlePageObject = ArcticlePageObjectFactory.get(driver);
 
@@ -53,21 +54,36 @@ public class SaveNewArticleToMyListTest extends BaseTest {
                     myListsPAgeObject.clickOnExistingFolder(folderName);
                     articlePageObject.closeArticle();
                 }
-                navigationUi.clickOnMyListsButton();
-                myListsPAgeObject.clickOnExistingFolder(folderName);
-                myListsPAgeObject.swipeByArticleToDelete(firstArticle);
 
 
             } else {
-                articlePageObject.addArticleToMySavedIos();
-                navigationUi.clickOnMyListsButton();
-                myListsPAgeObject.swipeByArticleToDelete(firstArticle);
+                if(j<1) {
+                    articlePageObject.addArticleToMySavedIos();
+                    articlePageObject.closeAuthWindow();
+                    articlePageObject.closeArticle();
+
+                    searchPageObject.clickSearchLine();
+                    j++;
+                }else{
+                    articlePageObject.addArticleToMySavedIos();
+                    articlePageObject.closeArticle();
+                }
+
+
             }
 
-            myListsPAgeObject.waitForArticleToAapearByTitle(secondrticle);
-            WebElement element = mainPageObject.waitForElementPrsenetBy(By.xpath("//*[@text='Java']"),
-                    "needed article was not found", 15);
         }
+        if(DevicePlatform.getInstance().isAndroid()){
+            navigationUi.clickOnMyListsButton();
+            myListsPAgeObject.clickOnExistingFolder(folderName);
+            myListsPAgeObject.swipeByArticleToDelete(firstArticle);
 
+        }else{
+            navigationUi.clickOnMyListsButton();
+            myListsPAgeObject.swipeByArticleToDelete(firstArticle);
+        }
+        myListsPAgeObject.waitForArticleToAapearByTitle(secondrticle);
+        //WebElement element = mainPageObject.waitForElementPrsenetBy(By.xpath("//*[@text='Java']"),
+        //      "needed article was not found", 15);
     }
 }

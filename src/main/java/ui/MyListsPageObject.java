@@ -48,7 +48,7 @@ public class MyListsPageObject extends MainPageObject{
     }
 
     private static String getSavedArticleXpathByTitle(String substring) {
-        return ARTICLE_BY_TITLE_TPL.replace("{TITLEG}", substring);
+        return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", substring);
     }
 
     /*TEMPLATES METHODS*/
