@@ -1,20 +1,21 @@
 package ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.DevicePlatform;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
-    public static final String
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "//*[@text='Add to reading list']";
+    protected static String
+            TITLE,
+            FOOTER_ELEMENT,
+            OPTIONS_BUTTON,
+            ADD_TO_MY_LIST_OVERLAY,
+            MY_LIST_NAME_INPUT,
+            MY_LIST_OK_BUTTON,
+            CLOSE_ARTICLE_BUTTON,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -27,8 +28,14 @@ public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (DevicePlatform.getInstance().isAndroid()) {
+
+            return title_element.getAttribute("text");
+        } else {
+            return title_element.getAttribute("name");
+        }
     }
+
     public void assertElementPresent(String error_message) {
         String article_title = getArticleTitle();
         if (article_title == null) {
@@ -38,9 +45,11 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT, "Cannot find the end of article", 20
-        );
+        if (DevicePlatform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 20);
+        } else {
+            swipeUpTillElementAppear(FOOTER_ELEMENT, "Cannot find the end of article", 40);
+        }
     }
 
     public void clickOnAddToMyListButton() {
@@ -70,7 +79,10 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot find first button to close article", 20);
     }
 
-
+    public void addArticleToMySavedIos(){
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                " Cannot add article to My saved", 15);
+    }
 
 
 }

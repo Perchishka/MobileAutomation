@@ -7,6 +7,8 @@ import ui.ArticlePageObject;
 import ui.MainPageObject;
 import ui.SearchPageObject;
 import ui.WikipediaMainPageObject;
+import ui.factories.ArcticlePageObjectFactory;
+import ui.factories.SearchPageObjectFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class FistTest extends BaseTest {
 
     @Test
     public void testCanselSearch() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.waitForCancelButtonToAppear();
         searchPageObject.clickCancelSearch();
@@ -43,12 +45,12 @@ public class FistTest extends BaseTest {
     @Test
     public void testCompareArticle(){
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArcticlePageObjectFactory.get(driver)
        String article_title = articlePageObject.getArticleTitle();
        Assert.assertEquals("We see unexpected title",
                "Java (programming language)", article_title);
@@ -57,7 +59,7 @@ public class FistTest extends BaseTest {
 
     @Test
     public void testSearchWodaAndAfterCheckInvisibilitiOf3Elements() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 
@@ -73,7 +75,7 @@ public class FistTest extends BaseTest {
         list.add(thirdArticle);
         list.stream().forEach(i -> System.out.println(i.getAttribute("text")));
 
-        SearchPageObject searchPageObject1 = new SearchPageObject(driver);
+        SearchPageObject searchPageObject1 = SearchPageObjectFactory.get(driver);
         searchPageObject.clickBackButton();
 
         WikipediaMainPageObject wikipediaMainPageObject = new WikipediaMainPageObject(driver);
@@ -81,16 +83,16 @@ public class FistTest extends BaseTest {
 
         //Assert.assertTrue(waitForListOfWebElementsNotPresented(list));
 
-        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
-                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(
+                        ("xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                                 "//*[@text='Object-oriented programming language']"),
                 "Java element was not found", 15));
-        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
-                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(
+                        ("xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                                 "//*[@text='Island of Indonesia']"),
                 "Java element was not found", 15));
-        Assert.assertTrue(mainPageObject.waitForElementNotPresented(By.xpath
-                        ("//*[@resource-id='org.wikipedia:id/page_list_item_container']" +
+        Assert.assertTrue(mainPageObject.waitForElementNotPresented(
+                        ("xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                                 "//*[@text='Programming language']"),
                 "Java element was not found", 15));
 
@@ -99,7 +101,7 @@ public class FistTest extends BaseTest {
 
     @Test
     public void testSearchForTheWord() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 

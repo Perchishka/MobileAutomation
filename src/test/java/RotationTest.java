@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.openqa.selenium.ScreenOrientation;
 import ui.ArticlePageObject;
 import ui.SearchPageObject;
+import ui.factories.ArcticlePageObjectFactory;
+import ui.factories.SearchPageObjectFactory;
 
 import java.time.Duration;
 
@@ -11,11 +13,11 @@ public class RotationTest extends BaseTest {
 
     @Test
     public void testChangeScreenOrientatitionSearchResult(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Java (programming language)");
-        ArticlePageObject  articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject  articlePageObject = ArcticlePageObjectFactory.get(driver);
         String articleBeforeRotation =articlePageObject.getArticleTitle();
         driver.rotate(ScreenOrientation.LANDSCAPE);
         String articleAfterRotation =articlePageObject.getArticleTitle();
@@ -26,7 +28,7 @@ public class RotationTest extends BaseTest {
     @Test
     public void testCheckSearchArticleInBackGround(){
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject =SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 

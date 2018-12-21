@@ -1,6 +1,7 @@
 import lib.BaseTest;
 import org.junit.Test;
 import ui.SearchPageObject;
+import ui.factories.SearchPageObjectFactory;
 
 public class Ex9Test extends BaseTest {
 
@@ -8,7 +9,7 @@ public class Ex9Test extends BaseTest {
     public void waitForElementByTitleAndDescription() {
         String title = "Java (programming language)";
         String description = "Object-oriented programming language";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 
@@ -26,7 +27,7 @@ public class Ex9Test extends BaseTest {
         String titleWebElement3 = "Java";
         String descriptionWebElemnt3 ="Island of Indonesia";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 

@@ -1,11 +1,15 @@
 package ui;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import lib.DevicePlatform;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -34,6 +38,25 @@ public class MainPageObject {
         return element.getAttribute(attribute);
     }
 
+    public void swipeUpTillElementAppear(String locator, String error_message, int max_swipe) {
+        int already_swiped = 0;
+        while (!isElementLocatedOnTheScreen(locator)) {
+            if (already_swiped > max_swipe) {
+                Assert.assertTrue(error_message, isElementLocatedOnTheScreen(locator));
+
+            }
+            swipeupQuick();
+            already_swiped++;
+        }
+    }
+
+    public boolean isElementLocatedOnTheScreen(String locator) {
+        int element_located_by_y = this.waitForElementPrsenetBy(locator,
+                " Cannot find elemnt by locator", 15).getLocation().getY();
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        return element_located_by_y < screen_size_by_y;
+    }
+
 
     public WebElement waitForElementPrsenetBy(String locator, String errorMessage) {
 
@@ -47,13 +70,15 @@ public class MainPageObject {
         return element;
     }
 
-    public WebElement waitForElementAndSendkeys(String locator, String errorMessage, String value, long timeoutInSeconds) {
+    public WebElement waitForElementAndSendkeys(String locator, String errorMessage, String value,
+                                                long timeoutInSeconds) {
         WebElement element = waitForElementPrsenetBy(locator, errorMessage, timeoutInSeconds);
         element.sendKeys(value);
         return element;
     }
 
-    public WebElement waitForElementClearAndSendkeys(String locator, String errorMessage, String value, long timeoutInSeconds) {
+    public WebElement waitForElementClearAndSendkeys(String locator, String errorMessage, String value,
+                                                     long timeoutInSeconds) {
         WebElement element = waitForElementPrsenetBy(locator, errorMessage, timeoutInSeconds);
         element.clear();
         element.sendKeys(value);
@@ -113,9 +138,15 @@ public class MainPageObject {
         TouchAction action = new TouchAction(driver);
         action
                 .press(point(right_x, middle_y))
-                .waitAction(waitOptions(ofMillis(300)))
-                .moveTo(point(left_x, middle_y))
-                .release()
+                .waitAction(waitOptions(ofMillis(300)));
+                if(DevicePlatform.getInstance().isAndroid()){
+                    action.moveTo(point(left_x, middle_y));
+                } else{
+                    int offset_x=(-1*element.getSize().getWidth());
+                    action.moveTo(point(offset_x, 0));
+                }
+
+                action.release()
                 .perform();
     }
 
@@ -135,11 +166,26 @@ public class MainPageObject {
 
         if (by_type.equals("xpath")) {
             return By.xpath(locator);
-        } else if(by_type.equals("id")) {
+        } else if (by_type.equals("id")) {
             return By.id(locator);
-        }else {
-            throw new IllegalArgumentException("Cannot get type of locator. Locator: "+ locator_with_type);
+        } else {
+            throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
         }
 
+    }
+
+    public void clickElementToTheRightUpperConer(String locator, String error_message){
+        WebElement element = this.waitForElementPrsenetBy(locator+"//..", error_message);
+        int  right_x = element.getLocation().getX();
+        int upper_y= element.getLocation().getY();
+        int lower_y = upper_y+element.getSize().getHeight();
+        int middle_y =(upper_y+lower_y)/2;
+        int width = element.getSize().getWidth();
+
+        int point_to_click_x=(right_x+width)-3;
+        int point_to_click_y=middle_y;
+
+        TouchAction action = new TouchAction(driver);
+        action.tap(point(point_to_click_x, point_to_click_y)).perform();
     }
 }
