@@ -100,6 +100,7 @@ if(DevicePlatform.getInstance().isMw()){
 }
         this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 " Cannot add article to My saved", 15);
+        this.waitForElementPrsenetBy("css: .drawer", "error");
 
     }
 

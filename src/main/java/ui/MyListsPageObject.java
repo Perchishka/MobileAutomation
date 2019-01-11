@@ -28,7 +28,7 @@ public class MyListsPageObject extends MainPageObject{
         this.swipeElementToLeft(article_title_xpath,
                 "Cannot find saved article");
         if(DevicePlatform.getInstance().isIOS()){
-            this.clickElementToTheRightUpperConer(article_title_xpath, "Cannot find  saved article");
+            clickElementToTheRightUpperConer(article_title_xpath, "Cannot find  saved article");
         }
 
         if(DevicePlatform.getInstance().isMw()){

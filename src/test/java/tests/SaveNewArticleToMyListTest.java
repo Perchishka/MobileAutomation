@@ -63,7 +63,7 @@ public class SaveNewArticleToMyListTest extends BaseTest {
                     auth.enterLoginData(login, password);
 
                     auth.clickSubmitButton();
-                auth.enterLoginData(login, password);
+
 
 
                     articlePageObject.waitForTitleElement();
@@ -88,10 +88,7 @@ public class SaveNewArticleToMyListTest extends BaseTest {
                     articlePageObject.closeArticle();
                 }
 
-
             }
-
-
 
         }
         if(DevicePlatform.getInstance().isAndroid()){
