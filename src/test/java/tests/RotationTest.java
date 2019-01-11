@@ -1,4 +1,7 @@
+package tests;
+
 import lib.BaseTest;
+import lib.DevicePlatform;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.ScreenOrientation;
@@ -13,13 +16,16 @@ public class RotationTest extends BaseTest {
 
     @Test
     public void testChangeScreenOrientatitionSearchResult(){
+        if(DevicePlatform.getInstance().isMw()){
+            return;
+        }
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Java (programming language)");
         ArticlePageObject  articlePageObject = ArcticlePageObjectFactory.get(driver);
         String articleBeforeRotation =articlePageObject.getArticleTitle();
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        rotateScreenLandscape();
         String articleAfterRotation =articlePageObject.getArticleTitle();
         Assert.assertEquals("Article have been changed after screen rotation", articleAfterRotation, articleBeforeRotation);
 
@@ -27,11 +33,13 @@ public class RotationTest extends BaseTest {
 
     @Test
     public void testCheckSearchArticleInBackGround(){
-
+        if(DevicePlatform.getInstance().isMw()){
+            return;
+        }
         SearchPageObject searchPageObject =SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
 
-        driver.runAppInBackground(Duration.ofSeconds(2));
+        backgroundApp(2);
     }
 }

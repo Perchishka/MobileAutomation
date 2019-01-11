@@ -1,8 +1,8 @@
+package tests;
+
 import lib.BaseTest;
 import lib.DevicePlatform;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import ui.*;
 import ui.factories.ArcticlePageObjectFactory;
 import ui.factories.NavigationUiFactory;
@@ -19,12 +19,14 @@ public class SaveNewArticleToMyListTest extends BaseTest {
     }
 
     @Test
-    public void testSaveNewArticleToMyListTest() {
+    public void testSaveNewArticleToMyListTest() throws InterruptedException {
 
 
         String folderName = "Learning programming";
         String firstArticle = "Java (programming language)";
         String secondrticle = "Java";
+        String password = "Musya2010";
+        String login = "doggys111";
         int j = 0;
         NavigationUi navigationUi = NavigationUiFactory.get(driver);
         MyListsPageObject myListsPAgeObject = new MyListsPageObject(driver);
@@ -45,7 +47,6 @@ public class SaveNewArticleToMyListTest extends BaseTest {
             System.out.println(article_title);
             if (DevicePlatform.getInstance().isAndroid()) {
                 articlePageObject.clickOnAddToMyListButton();
-
                 if (j < 1) {
                     articlePageObject.addArticleToMyListIfFolderDoesntExist(folderName);
                     articlePageObject.closeArticle();
@@ -53,10 +54,28 @@ public class SaveNewArticleToMyListTest extends BaseTest {
                 } else {
                     myListsPAgeObject.clickOnExistingFolder(folderName);
                     articlePageObject.closeArticle();
+                }}
+
+            else if(DevicePlatform.getInstance().isMw()){
+                    articlePageObject.addArticleToMySavedIos();
+                    AuthorisationPageObject auth = new AuthorisationPageObject(driver);
+                    auth.clickAuthButton();
+                    auth.enterLoginData(login, password);
+
+                    auth.clickSubmitButton();
+                auth.enterLoginData(login, password);
+
+
+                    articlePageObject.waitForTitleElement();
+                    assertEquals("we are not on the same page after login",
+                            article_title, articlePageObject.getArticleTitle());
+
+                    navigationUi.openNavigation();
+
+
                 }
 
-
-            } else {
+            else if (DevicePlatform.getInstance().isIOS()){
                 if(j<1) {
                     articlePageObject.addArticleToMySavedIos();
                     articlePageObject.closeAuthWindow();
@@ -71,6 +90,8 @@ public class SaveNewArticleToMyListTest extends BaseTest {
 
 
             }
+
+
 
         }
         if(DevicePlatform.getInstance().isAndroid()){

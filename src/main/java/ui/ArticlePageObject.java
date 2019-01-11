@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import lib.DevicePlatform;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class ArticlePageObject extends MainPageObject {
 
@@ -16,9 +17,10 @@ abstract public class ArticlePageObject extends MainPageObject {
             MY_LIST_OK_BUTTON,
             CLOSE_ARTICLE_BUTTON,
             PLACES_WITH_AUTOCLOSE,
-            OPTIONS_ADD_TO_MY_LIST_BUTTON;
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            OPTIONS_REMOVE_FROM_MY_LIST;
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -32,7 +34,10 @@ abstract public class ArticlePageObject extends MainPageObject {
         if (DevicePlatform.getInstance().isAndroid()) {
 
             return title_element.getAttribute("text");
-        } else {
+        }else if(DevicePlatform.getInstance().isMw()){
+                return title_element.getText();
+            }
+        else {
             return title_element.getAttribute("name");
         }
     }
@@ -50,6 +55,8 @@ abstract public class ArticlePageObject extends MainPageObject {
     public void swipeToFooter() {
         if (DevicePlatform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 20);
+        } else if(DevicePlatform.getInstance().isMw()){
+            this.scrollWebPageTillElementNotVisible(FOOTER_ELEMENT, "Cannot find the end of article", 40);
         } else {
             swipeUpTillElementAppear(FOOTER_ELEMENT, "Cannot find the end of article", 40);
         }
@@ -78,12 +85,19 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void closeArticle() {
+        if((DevicePlatform.getInstance().isAndroid() || DevicePlatform.getInstance().isIOS())){
         this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON,
-                "Cannot find first button to close article", 20);
+                "Cannot find first button to close article", 20);}
+        else {
+
+        }
+
     }
 
     public void addArticleToMySavedIos(){
-
+if(DevicePlatform.getInstance().isMw()){
+    removeArticleFromeSavedIfItAdded();
+}
         this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 " Cannot add article to My saved", 15);
 
@@ -91,6 +105,14 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     public  void closeAuthWindow(){
         this.waitForElementAndClick(PLACES_WITH_AUTOCLOSE, "Cannot click on autoclose button", 15);
+    }
+
+    public void removeArticleFromeSavedIfItAdded(){
+        if (isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST)){
+            waitForElementAndClick(OPTIONS_REMOVE_FROM_MY_LIST, "cannot click on remove button", 5);
+        }
+        waitForElementPrsenetBy(OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                " cannot find button to  add an articale to my saved list", 5);
     }
 
 

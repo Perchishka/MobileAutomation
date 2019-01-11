@@ -1,4 +1,7 @@
+package tests;
+
 import lib.BaseTest;
+import lib.DevicePlatform;
 import org.junit.Test;
 import ui.ArticlePageObject;
 import ui.MainPageObject;
@@ -17,7 +20,9 @@ public class SwipeTest extends BaseTest {
 
     @Test
     public void swipeUpTest() {
-
+        if(DevicePlatform.getInstance().isMw()){
+            return;
+        }
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
@@ -31,7 +36,9 @@ public class SwipeTest extends BaseTest {
 
     @Test
     public void swipeTillElementTest() {
-
+        if(DevicePlatform.getInstance().isMw()){
+            return;
+        }
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Appium");

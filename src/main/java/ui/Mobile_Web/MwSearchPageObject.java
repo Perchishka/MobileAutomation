@@ -1,15 +1,14 @@
-package ui.ios;
+package ui.Mobile_Web;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import ui.SearchPageObject;
 
-public class IOSSearchPageObject extends SearchPageObject {
+public class MwSearchPageObject extends SearchPageObject {
 
     static {
-        SEARCH_INIT_ELEMENT = "xpath://XCUIElementTypeSearchField[@name='Search Wikipedia']";
-        SEARCH_INPUT = "xpath://XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeSearchField";
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://XCUIElementTypeLink[contains(@name, '{SUBSTRING}')]";
+        SEARCH_INIT_ELEMENT = "css:button#searchIcon";
+        SEARCH_INPUT = "css:form>input[type='Search']";
+        SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://div[@class='results']//li[@title='{SUBSTRING}']";
         SEARCH_RESULTS_LIST_ELEMENTS = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']";
         SEARCH_RESULTS_LIST_TITLE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']" +
                 "//*[@resource-id='org.wikipedia:id/page_list_item_title']";
@@ -17,13 +16,14 @@ public class IOSSearchPageObject extends SearchPageObject {
         SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container' " +
                 "and android.widget.LinearLayout[android.widget.TextView[contains(@text,'{TITLE}')] " +
                 "and android.widget.TextView[contains(@text,'{DESCRIPTION}')] ]]";
-        EMPTY_SEARCH = "xpath://*[@text='No results found']";
-        SEARCH_CANCEL_BUTTON = "id:Close";
+        EMPTY_SEARCH = "css:p.without-results";
+        SEARCH_CANCEL_BUTTON = "css:button.cancel";
+        SEARCH_RESULT_ELEMENT="css:ul.page-list>li.page-summary";
 
 
     }
 
-    public IOSSearchPageObject(RemoteWebDriver driver) {
+    public MwSearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

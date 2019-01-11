@@ -2,13 +2,15 @@ package ui;
 
 import io.appium.java_client.AppiumDriver;
 import lib.DevicePlatform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class MyListsPageObject extends MainPageObject{
     protected static String
             ARTICLE_BY_TITLE_TPL,
-            FOLDER_NAME_BY_SUBSTRING_TPL;
+            FOLDER_NAME_BY_SUBSTRING_TPL,
+            REMOVE_FROM_SAVED_BUTTON;
 
-    public MyListsPageObject(AppiumDriver driver) {
+    public MyListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -21,12 +23,28 @@ public class MyListsPageObject extends MainPageObject{
     public void swipeByArticleToDelete(String article_title){
         waitForArticleToAapearByTitle(article_title);
         String article_title_xpath = getSavedArticleXpathByTitle(article_title);
+
+        if ((DevicePlatform.getInstance().isIOS() || DevicePlatform.getInstance().isAndroid())){
         this.swipeElementToLeft(article_title_xpath,
                 "Cannot find saved article");
         if(DevicePlatform.getInstance().isIOS()){
             this.clickElementToTheRightUpperConer(article_title_xpath, "Cannot find  saved article");
         }
+
+        if(DevicePlatform.getInstance().isMw()){
+            driver.navigate().refresh();
+        }
         this.waitForArticleToDisapearByTitle(article_title);
+    } else {
+            String remove_locator = getRemoveButoonByTitle(article_title);
+            waitForElementAndClick(remove_locator,
+                    "cannot find button to remove article from saved",5);
+        }
+    }
+
+    public String  getRemoveButoonByTitle(String article_title){
+       return REMOVE_FROM_SAVED_BUTTON.replace("{TITLE}", article_title);
+
     }
 
     public void waitForArticleToDisapearByTitle(String article_title){

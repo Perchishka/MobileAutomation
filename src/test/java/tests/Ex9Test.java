@@ -1,3 +1,5 @@
+package tests;
+
 import lib.BaseTest;
 import org.junit.Test;
 import ui.SearchPageObject;

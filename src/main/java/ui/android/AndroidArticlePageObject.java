@@ -1,6 +1,7 @@
 package ui.android;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import ui.ArticlePageObject;
 
 public class AndroidArticlePageObject extends ArticlePageObject {
@@ -15,7 +16,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
         OPTIONS_ADD_TO_MY_LIST_BUTTON = "//*[@text='Add to reading list']";
     }
 
-    public AndroidArticlePageObject(AppiumDriver driver) {
+    public AndroidArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

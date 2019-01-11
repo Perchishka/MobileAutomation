@@ -1,3 +1,5 @@
+package tests;
+
 import lib.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
